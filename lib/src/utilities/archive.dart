@@ -13,14 +13,17 @@ Archive _cloneArchive(
         return;
       }
       ArchiveFile copy;
-      if (_archiveFiles.containsKey(file.name)) {
-        copy = _archiveFiles[file.name]!;
-      } else {
-        var content = file.content as Uint8List;
-        var compress = !_noCompression.contains(file.name);
-        copy = ArchiveFile(file.name, content.length, content)
-          ..compress = compress;
-      }
+    if (_archiveFiles.containsKey(file.name)) {
+      copy = _archiveFiles[file.name]!;
+    } else {
+      var content = file.content as Uint8List;
+      var compress = !_noCompression.contains(file.name);
+      
+      // Adjusted constructor usage for updated API
+      copy = compress
+          ? ArchiveFile(file.name, content.length, content)
+          : ArchiveFile.noCompress(file.name, content.length, content);
+    }
       clone.addFile(copy);
     }
   });
