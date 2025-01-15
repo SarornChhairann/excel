@@ -7,25 +7,22 @@ Archive _cloneArchive(
 }) {
   var clone = Archive();
   archive.files.forEach((file) {
-    if (file.isFile) {
-      if (excludedFile != null &&
-          file.name.toLowerCase() == excludedFile.toLowerCase()) {
-        return;
-      }
-      ArchiveFile copy;
+  if (file.isFile) {
+    if (excludedFile != null &&
+        file.name.toLowerCase() == excludedFile.toLowerCase()) {
+      return;
+    }
+    ArchiveFile copy;
     if (_archiveFiles.containsKey(file.name)) {
       copy = _archiveFiles[file.name]!;
     } else {
       var content = file.content as Uint8List;
-      var compress = !_noCompression.contains(file.name);
-      
-      // Adjusted constructor usage for updated API
-      copy = compress
-          ? ArchiveFile(file.name, content.length, content)
-          : ArchiveFile.noCompress(file.name, content.length, content);
+
+      // Simply create an ArchiveFile without specifying compression
+      copy = ArchiveFile(file.name, content.length, content);
     }
-      clone.addFile(copy);
-    }
+    clone.addFile(copy);
+  }
   });
   return clone;
 }
